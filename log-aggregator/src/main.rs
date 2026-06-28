@@ -1,3 +1,6 @@
+use std::fs::File;
+use std::io::{self, BufRead, BufReader};
+
 #[derive (Debug, PartialEq)]
 enum LogLevel{
     Info,
@@ -44,11 +47,24 @@ fn parse_log_line(line: &str) -> Result<LogEntry, LogError> {
     })
 }
 
+fn read_logs_files(path: &str) -> io::Result<()> {
+    let file = File::open(path)?;
+    let reader = BufReader::new(file);
+
+    for result_line in reader.lines() {
+       let line = result_line?;
+
+        match parse_log_line(&line){
+            Ok(log) => println!("Log processado com sucesso: {:?}", log),
+            Err(e) => println!("Erro ao processar linha: {:?}", e),
+        }
+    }
+
+    Ok(())
+}
+
 fn main() {
-    let log_exemplo = "2026-06-27 20:00:00 [ERROR] Falha ao se conectar ao banco";
-    
-    match parse_log_line(log_exemplo) {
-        Ok(log) => println!("Log processado com sucesso: {:?}", log),
-        Err(e) => println!("Erro ao processar linha: {:?}", e),
+    if let Err(erro) = read_logs_files("logs.txt") {
+        println!("Erro ao abrir o arquivo: {:?}", erro);
     }
 }

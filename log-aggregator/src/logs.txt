@@ -1,0 +1,5 @@
+2026-06-27 20:01:00 [INFO] Sistema inicializado com sucesso
+2026-06-27 20:02:15 [WARN] Uso de memória acima de 80%
+2026-06-27 20:05:00 [ERROR] Falha na conexão com a API de pagamento
+linha_totalmente_errada_que_vai_gerar_erro
+2026-06-27 20:06:00 [INFO] Nova tentativa de sincronização concluída

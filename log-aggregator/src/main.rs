@@ -93,7 +93,12 @@ fn read_logs_files(path: &str, filtro: Option<&String>) -> io::Result<()> {
     }
     
     println!("Total de Erros críticos encontrados: {}", errors);
-    
+
+    println!("\n--- LOGS FILTRADOS ---");
+    for log in &valid_logs {
+       println!("{} [{:?}] -> {}", log.timestamp, log.level, log.message);
+    }
+
     Ok(())
 }
 

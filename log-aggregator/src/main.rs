@@ -1,5 +1,7 @@
 use std::fs::File;
 use std::io::{self, BufRead, BufReader};
+use std::env;
+
 
 #[derive (Debug, PartialEq)]
 enum LogLevel{
@@ -47,21 +49,33 @@ fn parse_log_line(line: &str) -> Result<LogEntry, LogError> {
     })
 }
 
-fn read_logs_files(path: &str) -> io::Result<()> {
+fn read_logs_files(path: &str, filtro: Option<&String>) -> io::Result<()> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
 
     let mut valid_logs : Vec<LogEntry> = Vec::new();
     let mut parsing_errors = 0;
-
+     
     for result_line in reader.lines() {
        let line = result_line?;
 
         match parse_log_line(&line){
             Ok(log) => {
-                valid_logs.push(log);
+                let match_filter  = match filtro{
+                    None => true,
+                    Some(f) => match f.as_str() {
+                        "INFO" => log.level == LogLevel::Info,
+                        "WARN" => log.level == LogLevel::Warning,
+                        "ERROR" => log.level == LogLevel::Error,
+                        _ => false,
+                    }
+                };
+
+                if match_filter {
+                    valid_logs.push(log);
+                }
             },            
-            Err(e) => {
+            Err(_) => {
                 parsing_errors += 1;
             } 
         }
@@ -84,7 +98,19 @@ fn read_logs_files(path: &str) -> io::Result<()> {
 }
 
 fn main() {
-    if let Err(erro) = read_logs_files("logs.txt") {
+    let args: Vec<String> = env::args().collect();
+
+    let path_file = match args.get(1) {
+        Some (caminho) => caminho,
+        None => {
+            println!("Uso: cargo run -- <caminho_do_arquivo> [filtro_level]");
+            return;
+        }
+    };
+
+    let filtro = args.get(2);
+
+    if let Err(erro) = read_logs_files(&path_file, filtro) {
         println!("Erro ao abrir o arquivo: {:?}", erro);
     }
 }

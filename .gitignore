@@ -2,6 +2,7 @@
 # O Cargo coloca todos os arquivos compilados aqui, incluindo dependências.
 target/
 
+
 # --- Arquivos do Cargo ---
 # ATENÇÃO: Se você estiver desenvolvendo uma biblioteca (library), remova a linha abaixo.
 # Para aplicações/binários, mantenha o Cargo.lock no controle de versão.

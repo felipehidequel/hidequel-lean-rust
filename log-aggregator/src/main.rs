@@ -51,15 +51,35 @@ fn read_logs_files(path: &str) -> io::Result<()> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
 
+    let mut valid_logs : Vec<LogEntry> = Vec::new();
+    let mut parsing_errors = 0;
+
     for result_line in reader.lines() {
        let line = result_line?;
 
         match parse_log_line(&line){
-            Ok(log) => println!("Log processado com sucesso: {:?}", log),
-            Err(e) => println!("Erro ao processar linha: {:?}", e),
+            Ok(log) => {
+                valid_logs.push(log);
+            },            
+            Err(e) => {
+                parsing_errors += 1;
+            } 
         }
     }
 
+    println!("--- RELATÓRIO DE PROCESSAMENTO ---");
+    println!("Total de logs lidos com sucesso: {}", valid_logs.len());
+    println!("Linhas corrompidas ignoradas: {}", parsing_errors);
+
+    let mut errors = 0;
+    for l in &valid_logs{
+        if l.level == LogLevel::Error { 
+            errors += 1;
+        }
+    }
+    
+    println!("Total de Erros críticos encontrados: {}", errors);
+    
     Ok(())
 }
 

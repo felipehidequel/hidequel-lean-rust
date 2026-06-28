@@ -1,0 +1,38 @@
+# --- Artefatos de Compilação ---
+# O Cargo coloca todos os arquivos compilados aqui, incluindo dependências.
+target/
+
+# --- Arquivos do Cargo ---
+# ATENÇÃO: Se você estiver desenvolvendo uma biblioteca (library), remova a linha abaixo.
+# Para aplicações/binários, mantenha o Cargo.lock no controle de versão.
+Cargo.lock
+
+# Arquivos temporários gerados pelo Cargo ao rodar testes ou benchmarks
+**/*.rs.bk
+
+# --- Logs e Crash Dumps ---
+cargo-timing.html
+rust_panic_*.txt
+
+# --- IDEs e Editores de Código ---
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ / PyCharm / CLion (JetBrains)
+.idea/
+*.iml
+
+# Arquivos temporários do Vim / Neovim
+*.swp
+*.swo
+
+# --- Outros ---
+# Arquivos de variáveis de ambiente (onde você guarda chaves de API secretas)
+.env
+.env.*
+!.env.example
